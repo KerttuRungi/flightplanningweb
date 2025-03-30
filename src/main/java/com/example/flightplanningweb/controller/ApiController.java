@@ -1,5 +1,7 @@
 package com.example.flightplanningweb.controller;
 import com.amadeus.exceptions.ResponseException;
+import com.amadeus.resources.SeatMap;
+import com.amadeus.shopping.SeatMaps;
 import com.example.flightplanningweb.services.AmadeusConnect;
 import com.amadeus.resources.Location;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,6 +39,9 @@ public class ApiController {
     public FlightPrice confirm(@RequestBody(required=true) FlightOfferSearch search) throws ResponseException {
         return AmadeusConnect.INSTANCE.confirm(search);
     }
-
+    @PostMapping("/seatmap")
+    public SeatMap seatmap(@RequestBody(required=true) FlightOfferSearch search) throws ResponseException {
+        return AmadeusConnect.INSTANCE.seatmap(search)[0];
+    }
 }
 
