@@ -12,17 +12,15 @@ export default function App() {
 
     return (
         <div>
-            {/*
             <Locate handleChoice={setDestination} display={"Departure"}/>
             <Locate handleChoice={setOrigin} display={"Destination"}/>
-*/}
             {
-                /*origin &&
+                origin &&
                 destination &&
                 <Flight origin={origin} destination={destination} setFlight={setFlight}/>
-            */}
+            }
             {
-                /*flight && */<SeatMap flight={flight}/>
+                flight && <SeatMap flight={flight}/>
             }
         </div>
     )

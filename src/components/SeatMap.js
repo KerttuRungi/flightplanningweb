@@ -3,7 +3,6 @@ import React, {useState} from "react";
 function SeatMap(props) {
     const [seatMap, setSeatMap] = useState();
     const [selectedSeats, setSelectedSeats] = useState([]);
-    const [filter, setFilter] = useState('all');
 
     function submit(event, props) {
         event.preventDefault();
@@ -12,42 +11,53 @@ function SeatMap(props) {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
-                }/*,
-                body: JSON.stringify(props.flight)*/
+                },
+                body: JSON.stringify(props.flight)
             }).then((response) => response.json())
             .then((json) => {
                 setSeatMap(json);
             });
-
     }
 
-    function getSeatType(seat) {
-        if (seat.characteristicCodes.includes("E")) return "bg-yellow-500"
-        if (seat.characteristicCodes.includes("L")) return "bg-blue-500"
-        if (seat.characteristicCodes.includes("E")) return "bg-green-500"
-        return "bg-gray-300"
+    /*Uuendab valitud istmete info istmel klikkimisel*/
+    function toggleSeatSelection(seat) {
+        setSelectedSeats(prevSelected =>
+            prevSelected.includes(seat.number)
+                ? prevSelected.filter(num => num !== seat.number)
+                : [...prevSelected, seat.number]
+        );
     }
 
+    /*Värvib iste vastavalt omadustele*/
+    function colourUnselected(seat) {
+        if (seat.available) {
+            /*E - väljapääsule lähedal*/
+            if (seat.characteristicCodes.includes("E")) return "rgb(40,175,82)"
+            /*L - lisa jalaruum*/
+            if (seat.characteristicCodes.includes("L")) return "rgb(82,250,82)"
+            /*W - aknaalune*/
+            if (seat.characteristicCodes.includes("W")) return "rgb(54,167,208)"
+            return "rgb(103,102,102)"
+        } else
+            return "rgb(224, 224, 224)";
+    }
+
+    /*Joonistab istmete plaani*/
     function drawSeatmap() {
-        if (!seatMap) return null;
+        const deck = seatMap.decks[0];
+        const seats = deck.seats;
+        const width = deck.deckConfiguration.width;
+        const length = deck.deckConfiguration.length;
 
-        const seats = seatMap.decks[0].seats;
-        const width = 7; // 7 columns: 6 seats + aisle
-        const length = 20; // 20 rows (as defined in your backend)
-
-        // Create a 2D grid (20 rows x 7 columns)
+        /*istmete plaani ruudustik*/
         let grid = Array.from({length}, () => Array(width).fill(null));
-
-        // Place seats in their respective grid positions
+        /*paigutab istmed ruudustikku*/
         seats.forEach(seat => {
-            const seatRow = seat.coordinates.y; // Row (0-indexed)
-            const seatCol = seat.coordinates.x <= 2 ? seat.coordinates.x : seat.coordinates.x - 1; // Column (A-F), adjust for aisle between C and D
-            grid[seatCol][seatRow] = seat;
+            grid[seat.coordinates.y][seat.coordinates.x] = seat;
         });
-
+        /*joonistab ruudustiku koos istmete, numbri ja omadustele vastava värviga*/
         return grid.map((row, rowIndex) => (
             <div key={rowIndex} style={{display: "flex", justifyContent: "center", gap: "8px", marginBottom: "5px"}}>
-                {/* Render the seat row */}
                 {row.map((seat, colIndex) =>
                     seat ? (
                         <div
@@ -58,15 +68,20 @@ function SeatMap(props) {
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
-                                backgroundColor: seat.available ? "green" : "red", // Available seats = green, unavailable = red
+                                backgroundColor: selectedSeats.includes(seat.number)
+                                    ? "purple"
+                                    : colourUnselected(seat),
                                 color: "white",
-                                borderRadius: "5px"
+                                borderRadius: "5px",
+                                cursor: seat.available ? "pointer" : "not-allowed",
+                                border: selectedSeats.includes(seat.number) ? "3px solid white" : "none"
                             }}
+                            onClick={seat.available ? () => toggleSeatSelection(seat) : null}
                         >
                             {seat.number}
                         </div>
                     ) : (
-                        <div key={`aisle-${rowIndex}-${colIndex}`} style={{width: "40px"}}></div> // Empty aisle space
+                        <div key={`aisle-${rowIndex}-${colIndex}`} style={{width: "40px"}}></div>
                     )
                 )}
             </div>
@@ -82,7 +97,7 @@ function SeatMap(props) {
             }
             {seatMap &&
                 <>
-                    <p>{seatMap.decks[0].seats.length} seats</p><br/>
+                    <p>Selected Seats: {selectedSeats.join(", ")}</p>
                 </>
             }
             {seatMap && drawSeatmap()}

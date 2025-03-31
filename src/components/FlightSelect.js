@@ -1,17 +1,16 @@
 import React from "react";
+
 function FlightSelect(props) {
     const options = props.flightOptions.map((flight, index) =>
         <>
-            <input type="radio" id={flight.id} name="select" value={index} />
+            <input type="radio" id={flight.id} name="select" value={index}/>
             <label htmlFor={flight.id}>
                 {"Price: " + flight.price.grandTotal + " " + flight.price.currency}
             </label>
             <div>
                 Available Seats: {flight.numberOfBookableSeats}
             </div>
-            <div>
-                One Way?: {flight.oneWay ? "True" : "False"}
-            </div><br></br>
+            <br></br>
         </>
     );
     return (
@@ -24,4 +23,5 @@ function FlightSelect(props) {
         </div>
     );
 }
+
 export default FlightSelect;
