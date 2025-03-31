@@ -37,10 +37,6 @@ public enum AmadeusConnect {
                         .and("max", 3));
     }
 
-    public FlightPrice confirm(FlightOfferSearch offer) throws ResponseException {
-        return amadeus.shopping.flightOffersSearch.pricing.post(offer);
-    }
-
     public SeatMap[] seatmap(FlightOfferSearch offer) throws ResponseException {
         Gson gson = new Gson();
         JsonObject json = gson.toJsonTree(offer).getAsJsonObject();

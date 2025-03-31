@@ -34,7 +34,7 @@ public class ApiController {
         return AmadeusConnect.INSTANCE.seatmap(search)[0];
     }
     @PostMapping("/randomSeatmap")
-    public RandomSeatMapGenerator.MySeatMap randomSeatmap(@RequestBody(required=true) FlightOfferSearch search) throws ResponseException {
+    public RandomSeatMapGenerator.MySeatMap randomSeatmap(@RequestBody(required=true) FlightOfferSearch search) {
         RandomSeatMapGenerator generator = new RandomSeatMapGenerator();
         return generator.generateRandomSeatMap("A320", search.getNumberOfBookableSeats());
     }
