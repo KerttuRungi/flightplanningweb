@@ -6,7 +6,6 @@ import com.amadeus.referenceData.Locations;
 import com.amadeus.resources.Location;
 import com.amadeus.exceptions.ResponseException;
 import com.amadeus.resources.FlightOfferSearch;
-import com.amadeus.resources.FlightPrice;
 import com.amadeus.resources.SeatMap;
 import com.google.gson.JsonObject;
 import com.google.gson.Gson;
