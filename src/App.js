@@ -1,25 +1,29 @@
-import logo from './logo.svg';
+import React, {useState} from 'react'
 import './App.css';
+import Locate from './components/Locate';
+import Flight from "./components/Flight";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import SeatMap from "./components/SeatMap";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export default function App() {
+    const [origin, setOrigin] = useState();
+    const [destination, setDestination] = useState();
+    const [flight, setFlight] = useState();
+
+    return (
+        <div>
+            {/*
+            <Locate handleChoice={setDestination} display={"Departure"}/>
+            <Locate handleChoice={setOrigin} display={"Destination"}/>
+*/}
+            {
+                /*origin &&
+                destination &&
+                <Flight origin={origin} destination={destination} setFlight={setFlight}/>
+            */}
+            {
+                /*flight && */<SeatMap flight={flight}/>
+            }
+        </div>
+    )
 }
-
-export default App;
