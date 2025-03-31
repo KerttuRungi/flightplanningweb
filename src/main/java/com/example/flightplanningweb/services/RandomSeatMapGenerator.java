@@ -43,8 +43,9 @@ public class RandomSeatMapGenerator {
         public MySeatMap(){}
     }
 
-    public MySeatMap generateRandomSeatMap(String aircraftCode) {
+    public MySeatMap generateRandomSeatMap(String aircraftCode, int numberOfBookableSeats) {
         Random random = new Random();
+        int bookableSeats = numberOfBookableSeats;
         MySeatMap mySeatMap = new MySeatMap();
         mySeatMap.aircraftCode = aircraftCode;
         mySeatMap.decks = new Deck[1];
@@ -72,8 +73,9 @@ public class RandomSeatMapGenerator {
                 }
                 if (row == totalRowsOfSeats - 1) seat.characteristicCodes.add("E");
                 seat.number = (row + 1) + seatPositions[pos];
-                seat.coordinates = new Coordinates(row, pos <= 2 ? pos : pos + 1);
-                seat.available = random.nextBoolean();
+                seat.coordinates = new Coordinates(pos <= 2 ? pos : pos + 1, row);
+                seat.available = bookableSeats > 0 && random.nextBoolean();
+                if (seat.available) --bookableSeats;
                 seats[row * seatPositions.length + pos] = seat;
             }
         }
