@@ -11,9 +11,6 @@ import com.amadeus.resources.SeatMap;
 import com.google.gson.JsonObject;
 import com.google.gson.Gson;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
 public enum AmadeusConnect {
     INSTANCE;
     private final Amadeus amadeus;
